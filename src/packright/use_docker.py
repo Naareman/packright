@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from packright._config import get_package_name, get_pkg_name
+from packright._config import get_pkg_name
 from packright._messages import success, warn
 
 _DOCKERIGNORE = """\
@@ -33,7 +33,6 @@ def add_docker(project_dir: str = ".") -> None:
     """
     root = Path(project_dir).resolve()
     pkg_name = get_pkg_name(project_dir)
-    package_name = get_package_name(project_dir)
 
     # Build the COPY line for uv.lock conditionally
     has_lock = (root / "uv.lock").exists()

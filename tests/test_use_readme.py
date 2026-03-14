@@ -15,9 +15,15 @@ def test_add_readme_creates_file(minimal_project: Path) -> None:
     assert readme.exists(), "README.md should be created"
 
     content = readme.read_text(encoding="utf-8")
-    assert "# test-pkg" in content, "README should contain the package name as title"
-    assert "pip install test-pkg" in content, "README should contain install instructions"
-    assert "import test_pkg" in content, "README should contain quickstart import"
+    assert "# test-pkg" in content, (
+        "README should contain the package name as title"
+    )
+    assert "pip install test-pkg" in content, (
+        "README should contain install instructions"
+    )
+    assert "import test_pkg" in content, (
+        "README should contain quickstart import"
+    )
     assert "PyPI" in content, "README should contain PyPI badge placeholder"
 
 

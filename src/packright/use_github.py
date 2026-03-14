@@ -8,9 +8,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from packright._config import get_package_name, read_project_config
+from packright._config import get_package_name
 from packright._messages import info, success, warn
-from packright.errors import PackrightError
 
 
 def add_github(project_dir: str = ".") -> None:

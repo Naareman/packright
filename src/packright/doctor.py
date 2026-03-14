@@ -25,14 +25,10 @@ def check_environment() -> tuple[int, int]:
 
     info("Checking development environment...\n")
 
-    # 1. Python version >= 3.10
-    total += 1
-    py_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-    if sys.version_info >= (3, 10):
-        success(f"Python {py_version}")
-        passed += 1
-    else:
-        warn(f"Python {py_version} — 3.10+ required")
+    # Python version (informational — requires-python enforces >= 3.10)
+    vi = sys.version_info
+    py_version = f"{vi.major}.{vi.minor}.{vi.micro}"
+    info(f"Python {py_version}")
 
     # 2. uv installed
     total += 1

@@ -31,7 +31,11 @@ def add_pytest(project_dir: str = ".") -> None:
 
     # Check if pytest config already exists
     if "tool" in config and "pytest" in config["tool"]:
-        warn("[tool.pytest.ini_options] already exists in pyproject.toml — skipping config.")
+        msg = (
+            "[tool.pytest.ini_options] already exists"
+            " in pyproject.toml — skipping config."
+        )
+        warn(msg)
     else:
         _append_pytest_config(root, pkg_name)
         success("Added [tool.pytest.ini_options] to pyproject.toml")
@@ -76,7 +80,8 @@ def _append_pytest_config(root: Path, pkg_name: str) -> None:
         f'addopts = "--cov={pkg_name} --cov-report=term-missing"\n'
     )
 
-    toml_path.write_text(existing.rstrip("\n") + "\n" + pytest_section, encoding="utf-8")
+    new_content = existing.rstrip("\n") + "\n" + pytest_section
+    toml_path.write_text(new_content, encoding="utf-8")
 
 
 def _write_if_missing(path: Path, content: str, root: Path) -> None:

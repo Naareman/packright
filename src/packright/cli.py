@@ -76,7 +76,9 @@ def scaffold(name: str, path: str) -> None:
 
 
 @main.command("use-pytest")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_pytest(path: str) -> None:
     """Add pytest configuration and test scaffolding."""
     try:
@@ -87,7 +89,9 @@ def use_pytest(path: str) -> None:
 
 
 @main.command("use-mkdocs")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_mkdocs(path: str) -> None:
     """Add MkDocs documentation scaffolding."""
     try:
@@ -98,7 +102,9 @@ def use_mkdocs(path: str) -> None:
 
 
 @main.command("use-pre-commit")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_pre_commit(path: str) -> None:
     """Add pre-commit configuration with ruff, mypy, and standard hooks."""
     try:
@@ -109,7 +115,9 @@ def use_pre_commit(path: str) -> None:
 
 
 @main.command("use-github-actions")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_github_actions_cmd(path: str) -> None:
     """Add GitHub Actions workflows for CI, release, and docs."""
     try:
@@ -120,7 +128,9 @@ def use_github_actions_cmd(path: str) -> None:
 
 
 @main.command("use-rich")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_rich(path: str) -> None:
     """Add a rich-based _messages.py module for user output."""
     from packright.use_rich import add_rich
@@ -133,7 +143,9 @@ def use_rich(path: str) -> None:
 
 
 @main.command("use-errors")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 @click.option(
     "--base-name",
     default=None,
@@ -151,7 +163,9 @@ def use_errors(path: str, base_name: str | None) -> None:
 
 
 @main.command("use-license")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 @click.option(
     "--type",
     "license_type",
@@ -175,7 +189,9 @@ def use_license(path: str, license_type: str, author: str) -> None:
 
 
 @main.command("use-readme")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_readme(path: str) -> None:
     """Add a README.md with badges, install instructions, and quickstart."""
     from packright.use_readme import add_readme
@@ -188,7 +204,9 @@ def use_readme(path: str) -> None:
 
 
 @main.command("use-ruff")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_ruff(path: str) -> None:
     """Add ruff linter configuration to pyproject.toml."""
     from packright.use_ruff import add_ruff
@@ -201,7 +219,9 @@ def use_ruff(path: str) -> None:
 
 
 @main.command("use-coverage")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_coverage(path: str) -> None:
     """Add coverage configuration to pyproject.toml."""
     from packright.use_coverage import add_coverage
@@ -214,7 +234,9 @@ def use_coverage(path: str) -> None:
 
 
 @main.command("use-git")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_git(path: str) -> None:
     """Initialize a git repository with .gitignore and initial commit."""
     from packright.use_git import add_git
@@ -227,7 +249,9 @@ def use_git(path: str) -> None:
 
 
 @main.command("bump-version")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 @click.option(
     "--part",
     default="patch",
@@ -246,7 +270,9 @@ def bump_version_cmd(path: str, part: str) -> None:
 
 
 @main.command()
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def check(path: str) -> None:
     """Audit the project structure against best practices (22 checks)."""
     from packright.check import audit_project
@@ -261,7 +287,9 @@ def check(path: str) -> None:
 
 
 @main.command("use-docker")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_docker(path: str) -> None:
     """Add Dockerfile and .dockerignore to the project."""
     from packright.use_docker import add_docker
@@ -274,7 +302,9 @@ def use_docker(path: str) -> None:
 
 
 @main.command("use-mypy")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_mypy(path: str) -> None:
     """Add mypy configuration to pyproject.toml and create py.typed marker."""
     from packright.use_mypy import add_mypy
@@ -287,7 +317,9 @@ def use_mypy(path: str) -> None:
 
 
 @main.command("browse-pypi")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def browse_pypi_cmd(path: str) -> None:
     """Open the project's PyPI page in the browser."""
     from packright.browse import browse_pypi
@@ -300,7 +332,9 @@ def browse_pypi_cmd(path: str) -> None:
 
 
 @main.command("browse-github")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def browse_github_cmd(path: str) -> None:
     """Open the project's GitHub repository in the browser."""
     from packright.browse import browse_github
@@ -313,7 +347,9 @@ def browse_github_cmd(path: str) -> None:
 
 
 @main.command("browse-docs")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def browse_docs_cmd(path: str) -> None:
     """Open the project's documentation in the browser."""
     from packright.browse import browse_docs
@@ -326,7 +362,9 @@ def browse_docs_cmd(path: str) -> None:
 
 
 @main.command("use-gitlab-ci")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_gitlab_ci(path: str) -> None:
     """Add GitLab CI configuration with lint, test, and publish stages."""
     from packright.use_gitlab_ci import add_gitlab_ci
@@ -339,7 +377,11 @@ def use_gitlab_ci(path: str) -> None:
 
 
 @main.command("init")
-@click.option("--path", default=".", help="Parent directory to create the package in. Defaults to current directory.")
+@click.option(
+    "--path",
+    default=".",
+    help="Parent directory to create the package in.",
+)
 def init(path: str) -> None:
     """Interactively create a new Python package."""
     from packright.init_interactive import init_project
@@ -362,7 +404,9 @@ def doctor() -> None:
 
 
 @main.command("use-github")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_github(path: str) -> None:
     """Create a GitHub repository and link it to the project."""
     from packright.use_github import add_github
@@ -375,7 +419,9 @@ def use_github(path: str) -> None:
 
 
 @main.command("use-changelog")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_changelog(path: str) -> None:
     """Add a CHANGELOG.md following the Keep a Changelog format."""
     from packright.use_changelog import add_changelog
@@ -388,7 +434,9 @@ def use_changelog(path: str) -> None:
 
 
 @main.command("use-contributing")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 def use_contributing(path: str) -> None:
     """Add contributing guidelines, code of conduct, and issue templates."""
     from packright.use_contributing import add_contributing
@@ -401,7 +449,9 @@ def use_contributing(path: str) -> None:
 
 
 @main.command("use-module")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
 @click.argument("name")
 def use_module(path: str, name: str) -> None:
     """Scaffold a new module and its matching test file."""
@@ -416,8 +466,12 @@ def use_module(path: str, name: str) -> None:
 
 @main.command("use-dep")
 @click.argument("name")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
-@click.option("--version", default=None, help="Minimum version constraint (e.g., 2.31).")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
+@click.option(
+    "--version", default=None, help="Minimum version constraint (e.g., 2.31).",
+)
 def use_dep(name: str, path: str, version: str | None) -> None:
     """Add a runtime dependency via uv."""
     from packright.use_dep import add_dep
@@ -431,8 +485,12 @@ def use_dep(name: str, path: str, version: str | None) -> None:
 
 @main.command("use-dev-dep")
 @click.argument("name")
-@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
-@click.option("--version", default=None, help="Minimum version constraint (e.g., 2.31).")
+@click.option(
+    "--path", default=".", help="Project directory."
+)
+@click.option(
+    "--version", default=None, help="Minimum version constraint (e.g., 2.31).",
+)
 def use_dev_dep(name: str, path: str, version: str | None) -> None:
     """Add a development dependency via uv."""
     from packright.use_dep import add_dev_dep

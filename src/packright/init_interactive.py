@@ -6,7 +6,6 @@ Prompts the user for project metadata and scaffolds a new package.
 from __future__ import annotations
 
 import re
-from pathlib import Path
 
 import click
 

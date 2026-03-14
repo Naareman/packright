@@ -106,7 +106,12 @@ def _write(path: Path, content: str) -> None:
     """Write content to a file, creating parent dirs if needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
-    info(f"  Created {path.relative_to(path.parent.parent.parent) if len(path.parts) > 3 else path.name}")
+    rel = (
+        path.relative_to(path.parent.parent.parent)
+        if len(path.parts) > 3
+        else path.name
+    )
+    info(f"  Created {rel}")
 
 
 def _count_files(directory: Path) -> int:

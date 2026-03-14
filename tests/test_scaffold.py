@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from packright.errors import FileExistsError
-from packright.scaffold import create_package, _normalize_name
+from packright.scaffold import _normalize_name, create_package
 
 
 def test_normalize_name_replaces_hyphens():

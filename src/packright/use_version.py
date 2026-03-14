@@ -79,8 +79,12 @@ def bump_version(project_dir: str = ".", part: str = "patch") -> None:
 
     project_start = project_match.start()
     # Find the next section header after [project]
-    next_section = re.search(r'^\[', raw[project_match.end():], re.MULTILINE)
-    project_end = project_match.end() + next_section.start() if next_section else len(raw)
+    tail = raw[project_match.end():]
+    next_section = re.search(r'^\[', tail, re.MULTILINE)
+    if next_section:
+        project_end = project_match.end() + next_section.start()
+    else:
+        project_end = len(raw)
 
     project_section = raw[project_start:project_end]
     updated_section = re.sub(

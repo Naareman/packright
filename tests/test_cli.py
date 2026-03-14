@@ -11,7 +11,7 @@ from packright.cli import main
 def test_scaffold_command(tmp_path: object) -> None:
     """Verify that the scaffold command creates a package directory."""
     runner = CliRunner()
-    with runner.isolated_filesystem() as td:
+    with runner.isolated_filesystem():
         result = runner.invoke(main, ["scaffold", "my-lib"])
 
         assert result.exit_code == 0, (

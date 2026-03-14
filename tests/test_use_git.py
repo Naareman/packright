@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import patch
 
 from packright.use_git import add_git
 
@@ -29,7 +28,9 @@ def test_add_git_creates_initial_commit(minimal_project: Path) -> None:
         text=True,
     )
     assert result.returncode == 0, "git log should succeed"
-    assert "initial commit" in result.stdout, "should contain the initial commit message"
+    assert "initial commit" in result.stdout, (
+        "should contain the initial commit message"
+    )
 
 
 def test_add_git_skips_if_exists(minimal_project: Path) -> None:

@@ -42,26 +42,37 @@ def _make_run_side_effect(passing_commands: set[str]):
 
 def test_check_environment_all_pass() -> None:
     """Verify that all checks pass when all tools are available."""
-    all_commands = {"uv", "git", "git config user.name", "git config user.email", "gh", "gh auth status", "ruff"}
+    all_commands = {
+        "uv", "git", "git config user.name",
+        "git config user.email", "gh", "gh auth status",
+        "ruff",
+    }
 
-    with patch("packright.doctor.subprocess.run", side_effect=_make_run_side_effect(all_commands)):
+    mock_run = _make_run_side_effect(all_commands)
+    with patch("packright.doctor.subprocess.run", side_effect=mock_run):
         passed, total = check_environment()
 
-    # Python check always passes on 3.10+ (which we require)
-    assert passed == total, f"Expected all {total} checks to pass, got {passed}"
+    assert passed == total, (
+        f"Expected all {total} checks to pass, got {passed}"
+    )
 
 
 def test_check_environment_some_fail() -> None:
     """Verify that missing tools are reported as failures."""
     # Only git and Python pass
-    some_commands = {"git", "git config user.name", "git config user.email"}
-
-    with patch("packright.doctor.subprocess.run", side_effect=_make_run_side_effect(some_commands)):
+    some_commands = {
+        "git", "git config user.name", "git config user.email",
+    }
+    mock_run = _make_run_side_effect(some_commands)
+    with patch(
+        "packright.doctor.subprocess.run",
+        side_effect=mock_run,
+    ):
         passed, total = check_environment()
 
-    assert total == 8, f"Expected 8 total checks, got {total}"
-    # Python (always) + git + git user.name + git user.email = 4
-    assert passed == 4, f"Expected 4 checks to pass, got {passed}"
+    assert total == 7, f"Expected 7 total checks, got {total}"
+    # git + git user.name + git user.email = 3
+    assert passed == 3, f"Expected 3 checks to pass, got {passed}"
 
 
 def test_check_environment_tool_not_found() -> None:
@@ -72,6 +83,6 @@ def test_check_environment_tool_not_found() -> None:
     with patch("packright.doctor.subprocess.run", side_effect=side_effect):
         passed, total = check_environment()
 
-    # Only Python check passes (no subprocess call)
-    assert passed == 1, f"Expected only Python check to pass, got {passed}"
-    assert total == 8
+    # No checks pass (all use subprocess)
+    assert passed == 0, f"Expected 0 checks to pass, got {passed}"
+    assert total == 7

@@ -15,7 +15,9 @@ def test_add_ruff_creates_config(minimal_project: Path) -> None:
     content = toml_path.read_text(encoding="utf-8")
     assert "[tool.ruff]" in content, "pyproject.toml should contain [tool.ruff]"
     assert "line-length = 88" in content, "ruff config should set line-length"
-    assert "[tool.ruff.lint]" in content, "pyproject.toml should contain [tool.ruff.lint]"
+    assert "[tool.ruff.lint]" in content, (
+        "pyproject.toml should contain [tool.ruff.lint]"
+    )
 
 
 def test_add_ruff_no_target_version(minimal_project: Path) -> None:
