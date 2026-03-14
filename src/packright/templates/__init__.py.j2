@@ -1,0 +1,12 @@
+"""{{ name }}: One clear sentence about what this does."""
+
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("{{ name }}")
+except PackageNotFoundError:
+    __version__ = "0.0.0+dev"
+
+__all__: list[str] = [
+    "__version__",
+]
