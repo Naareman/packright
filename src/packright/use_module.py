@@ -9,6 +9,7 @@ from pathlib import Path
 
 from packright._config import get_pkg_name
 from packright._messages import success, warn
+from packright.errors import PackrightError
 
 _MODULE_TEMPLATE = '''\
 """TODO: Add module docstring for {name}."""
@@ -30,6 +31,27 @@ def test_placeholder() -> None:
 '''
 
 
+def _validate_module_name(name: str) -> None:
+    """Validate that name is a safe, valid Python identifier.
+
+    Args:
+        name: Module name to validate.
+
+    Raises:
+        PackrightError: If name contains path separators or is not a valid identifier.
+    """
+    forbidden = ("/", "\\", "..")
+    for char in forbidden:
+        if char in name:
+            raise PackrightError(
+                f"Invalid module name '{name}': must not contain '{char}'."
+            )
+    if not name.isidentifier():
+        raise PackrightError(
+            f"Invalid module name '{name}': must be a valid Python identifier."
+        )
+
+
 def add_module(project_dir: str = ".", name: str = "") -> None:
     """Create a new Python module under ``src/<pkg_name>/<name>.py``.
 
@@ -40,6 +62,8 @@ def add_module(project_dir: str = ".", name: str = "") -> None:
     if not name:
         warn("No module name provided.")
         return
+
+    _validate_module_name(name)
 
     root = Path(project_dir).resolve()
     pkg_name = get_pkg_name(project_dir)
@@ -67,6 +91,8 @@ def add_test(project_dir: str = ".", name: str = "") -> None:
     if not name:
         warn("No test name provided.")
         return
+
+    _validate_module_name(name)
 
     root = Path(project_dir).resolve()
     pkg_name = get_pkg_name(project_dir)

@@ -2,10 +2,15 @@
 
 Usage:
     packright scaffold my-app
+    packright init
+    packright doctor
+    packright check
+    packright bump-version
     packright use-pytest
     packright use-mkdocs
     packright use-pre-commit
     packright use-github-actions
+    packright use-github
     packright use-rich
     packright use-errors
     packright use-license
@@ -13,8 +18,17 @@ Usage:
     packright use-ruff
     packright use-coverage
     packright use-git
-    packright bump-version
-    packright check
+    packright use-docker
+    packright use-mypy
+    packright use-gitlab-ci
+    packright use-changelog
+    packright use-contributing
+    packright use-module
+    packright use-dep
+    packright use-dev-dep
+    packright browse-pypi
+    packright browse-github
+    packright browse-docs
 """
 
 from __future__ import annotations
@@ -244,3 +258,187 @@ def check(path: str) -> None:
     except PackrightError as e:
         abort(str(e))
         sys.exit(1)
+
+
+@main.command("use-docker")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_docker(path: str) -> None:
+    """Add Dockerfile and .dockerignore to the project."""
+    from packright.use_docker import add_docker
+
+    try:
+        add_docker(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-mypy")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_mypy(path: str) -> None:
+    """Add mypy configuration to pyproject.toml and create py.typed marker."""
+    from packright.use_mypy import add_mypy
+
+    try:
+        add_mypy(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("browse-pypi")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def browse_pypi_cmd(path: str) -> None:
+    """Open the project's PyPI page in the browser."""
+    from packright.browse import browse_pypi
+
+    try:
+        browse_pypi(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("browse-github")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def browse_github_cmd(path: str) -> None:
+    """Open the project's GitHub repository in the browser."""
+    from packright.browse import browse_github
+
+    try:
+        browse_github(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("browse-docs")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def browse_docs_cmd(path: str) -> None:
+    """Open the project's documentation in the browser."""
+    from packright.browse import browse_docs
+
+    try:
+        browse_docs(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-gitlab-ci")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_gitlab_ci(path: str) -> None:
+    """Add GitLab CI configuration with lint, test, and publish stages."""
+    from packright.use_gitlab_ci import add_gitlab_ci
+
+    try:
+        add_gitlab_ci(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("init")
+@click.option("--path", default=".", help="Parent directory to create the package in. Defaults to current directory.")
+def init(path: str) -> None:
+    """Interactively create a new Python package."""
+    from packright.init_interactive import init_project
+
+    try:
+        init_project(parent=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("doctor")
+def doctor() -> None:
+    """Check the development environment for required tools."""
+    from packright.doctor import check_environment
+
+    passed, total = check_environment()
+    if passed < total:
+        sys.exit(1)
+
+
+@main.command("use-github")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_github(path: str) -> None:
+    """Create a GitHub repository and link it to the project."""
+    from packright.use_github import add_github
+
+    try:
+        add_github(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-changelog")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_changelog(path: str) -> None:
+    """Add a CHANGELOG.md following the Keep a Changelog format."""
+    from packright.use_changelog import add_changelog
+
+    try:
+        add_changelog(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-contributing")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_contributing(path: str) -> None:
+    """Add contributing guidelines, code of conduct, and issue templates."""
+    from packright.use_contributing import add_contributing
+
+    try:
+        add_contributing(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-module")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.argument("name")
+def use_module(path: str, name: str) -> None:
+    """Scaffold a new module and its matching test file."""
+    from packright.use_module import add_module_with_test
+
+    try:
+        add_module_with_test(project_dir=path, name=name)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-dep")
+@click.argument("name")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option("--version", default=None, help="Minimum version constraint (e.g., 2.31).")
+def use_dep(name: str, path: str, version: str | None) -> None:
+    """Add a runtime dependency via uv."""
+    from packright.use_dep import add_dep
+
+    try:
+        add_dep(project_dir=path, name=name, version=version)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-dev-dep")
+@click.argument("name")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option("--version", default=None, help="Minimum version constraint (e.g., 2.31).")
+def use_dev_dep(name: str, path: str, version: str | None) -> None:
+    """Add a development dependency via uv."""
+    from packright.use_dep import add_dev_dep
+
+    try:
+        add_dev_dep(project_dir=path, name=name, version=version)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e

@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from packright._config import detect_package_dir
 from packright._messages import info, success, warn
 from packright._templates import render_template
-from packright.errors import ConfigError
 
 
 def add_rich(project_dir: str = ".") -> Path:
@@ -25,7 +25,7 @@ def add_rich(project_dir: str = ".") -> Path:
     Raises:
         ConfigError: If no package directory is found under src/.
     """
-    pkg_dir = _detect_package_dir(project_dir)
+    pkg_dir = detect_package_dir(project_dir)
     target = pkg_dir / "_messages.py"
 
     if target.exists():
@@ -37,36 +37,3 @@ def add_rich(project_dir: str = ".") -> Path:
     success(f"Created [bold]{target}[/bold]")
     info("Import with: from <pkg>._messages import info, success, warn, abort")
     return target
-
-
-def _detect_package_dir(project_dir: str) -> Path:
-    """Find the single package directory under src/.
-
-    Args:
-        project_dir: Root of the project.
-
-    Returns:
-        Path to the package directory (e.g., src/my_pkg/).
-
-    Raises:
-        ConfigError: If src/ is missing or contains no package directory.
-    """
-    src = Path(project_dir).resolve() / "src"
-    if not src.is_dir():
-        raise ConfigError("No src/ directory found.", field="src")
-
-    candidates = [
-        d for d in src.iterdir()
-        if d.is_dir() and not d.name.startswith((".", "_"))
-    ]
-
-    if not candidates:
-        raise ConfigError("No package directory found under src/.", field="src")
-    if len(candidates) > 1:
-        names = ", ".join(d.name for d in candidates)
-        raise ConfigError(
-            f"Multiple packages found under src/: {names}. Cannot auto-detect.",
-            field="src",
-        )
-
-    return candidates[0]

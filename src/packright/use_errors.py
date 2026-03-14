@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from packright._config import detect_package_dir
 from packright._messages import info, success, warn
 from packright._templates import render_template
-from packright.errors import ConfigError
 
 
 def add_errors(project_dir: str = ".", base_name: str | None = None) -> Path:
@@ -27,7 +27,7 @@ def add_errors(project_dir: str = ".", base_name: str | None = None) -> Path:
     Raises:
         ConfigError: If no package directory is found under src/.
     """
-    pkg_dir = _detect_package_dir(project_dir)
+    pkg_dir = detect_package_dir(project_dir)
     target = pkg_dir / "errors.py"
 
     if target.exists():
@@ -59,36 +59,3 @@ def _derive_error_name(pkg_name: str) -> str:
     """
     parts = pkg_name.replace("-", "_").split("_")
     return "".join(part.capitalize() for part in parts) + "Error"
-
-
-def _detect_package_dir(project_dir: str) -> Path:
-    """Find the single package directory under src/.
-
-    Args:
-        project_dir: Root of the project.
-
-    Returns:
-        Path to the package directory (e.g., src/my_pkg/).
-
-    Raises:
-        ConfigError: If src/ is missing or contains no package directory.
-    """
-    src = Path(project_dir).resolve() / "src"
-    if not src.is_dir():
-        raise ConfigError("No src/ directory found.", field="src")
-
-    candidates = [
-        d for d in src.iterdir()
-        if d.is_dir() and not d.name.startswith((".", "_"))
-    ]
-
-    if not candidates:
-        raise ConfigError("No package directory found under src/.", field="src")
-    if len(candidates) > 1:
-        names = ", ".join(d.name for d in candidates)
-        raise ConfigError(
-            f"Multiple packages found under src/: {names}. Cannot auto-detect.",
-            field="src",
-        )
-
-    return candidates[0]

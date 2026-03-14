@@ -67,12 +67,29 @@ def bump_version(project_dir: str = ".", part: str = "patch") -> None:
     new_version = f"{major}.{minor}.{patch}"
 
     raw = toml_path.read_text(encoding="utf-8")
-    updated = re.sub(
+
+    # Find the [project] section and replace version only within it,
+    # avoiding matches in other sections (e.g., python_version in [tool.mypy]).
+    project_match = re.search(r'^\[project\]\s*$', raw, re.MULTILINE)
+    if not project_match:
+        raise ConfigError(
+            "No [project] section found in pyproject.toml.",
+            field="project",
+        )
+
+    project_start = project_match.start()
+    # Find the next section header after [project]
+    next_section = re.search(r'^\[', raw[project_match.end():], re.MULTILINE)
+    project_end = project_match.end() + next_section.start() if next_section else len(raw)
+
+    project_section = raw[project_start:project_end]
+    updated_section = re.sub(
         r'(version\s*=\s*")[^"]+(")',
         rf"\g<1>{new_version}\2",
-        raw,
+        project_section,
         count=1,
     )
+    updated = raw[:project_start] + updated_section + raw[project_end:]
     toml_path.write_text(updated, encoding="utf-8")
 
     info(f"Version: {old_version} -> {new_version}")

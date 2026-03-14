@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -103,7 +103,7 @@ def add_github_actions(project_dir: str = ".") -> None:
     """Add GitHub Actions workflows for CI, release, and docs deployment.
 
     Creates three workflow files under .github/workflows/:
-    - ci.yml: Run tests on push/PR with Python 3.10-3.12 matrix using uv
+    - ci.yml: Run tests on push/PR with Python 3.10-3.13 matrix using uv
     - release.yml: Publish to PyPI on v* tags using trusted publishing
     - docs.yml: Deploy MkDocs to GitHub Pages on push to main
 

@@ -122,3 +122,36 @@ def get_pkg_name(project_dir: str = ".") -> str:
         ConfigError: If pyproject.toml is missing or has no [project] name.
     """
     return get_package_name(project_dir).replace("-", "_").replace(" ", "_").lower()
+
+
+def detect_package_dir(project_dir: str = ".") -> Path:
+    """Find the single package directory under src/.
+
+    Args:
+        project_dir: Root of the project.
+
+    Returns:
+        Path to the package directory (e.g., src/my_pkg/).
+
+    Raises:
+        ConfigError: If src/ is missing or contains no package directory.
+    """
+    src = Path(project_dir).resolve() / "src"
+    if not src.is_dir():
+        raise ConfigError("No src/ directory found.", field="src")
+
+    candidates = [
+        d for d in src.iterdir()
+        if d.is_dir() and not d.name.startswith((".", "_"))
+    ]
+
+    if not candidates:
+        raise ConfigError("No package directory found under src/.", field="src")
+    if len(candidates) > 1:
+        names = ", ".join(d.name for d in candidates)
+        raise ConfigError(
+            f"Multiple packages found under src/: {names}. Cannot auto-detect.",
+            field="src",
+        )
+
+    return candidates[0]
