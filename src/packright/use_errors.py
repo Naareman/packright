@@ -40,7 +40,7 @@ def add_errors(project_dir: str = ".", base_name: str | None = None) -> Path:
     if base_name is None:
         base_name = _derive_error_name(pkg_name)
 
-    context = {"name": project_name, "pkg_name": pkg_name}
+    context = {"name": project_name, "pkg_name": pkg_name, "base_error_name": base_name}
     content = render_template("errors.py.j2", context)
     target.write_text(content, encoding="utf-8")
     success(f"Created [bold]{target}[/bold]")

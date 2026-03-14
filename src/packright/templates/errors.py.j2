@@ -1,5 +1,5 @@
 """Structured exceptions for {{ name }}."""
 
 
-class {{ pkg_name | replace('_', ' ') | title | replace(' ', '') }}Error(Exception):
+class {{ base_error_name | default(pkg_name | replace('_', ' ') | title | replace(' ', '') + 'Error') }}(Exception):
     """Base exception for {{ name }}. Catch this to handle any {{ name }} error."""
