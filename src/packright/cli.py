@@ -9,6 +9,11 @@ Usage:
     packright use-rich
     packright use-errors
     packright use-license
+    packright use-readme
+    packright use-ruff
+    packright use-coverage
+    packright use-git
+    packright bump-version
     packright check
 """
 
@@ -150,6 +155,77 @@ def use_license(path: str, license_type: str, author: str) -> None:
 
     try:
         add_license(project_dir=path, license_type=license_type, author=author)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-readme")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_readme(path: str) -> None:
+    """Add a README.md with badges, install instructions, and quickstart."""
+    from packright.use_readme import add_readme
+
+    try:
+        add_readme(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-ruff")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_ruff(path: str) -> None:
+    """Add ruff linter configuration to pyproject.toml."""
+    from packright.use_ruff import add_ruff
+
+    try:
+        add_ruff(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-coverage")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_coverage(path: str) -> None:
+    """Add coverage configuration to pyproject.toml."""
+    from packright.use_coverage import add_coverage
+
+    try:
+        add_coverage(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("use-git")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+def use_git(path: str) -> None:
+    """Initialize a git repository with .gitignore and initial commit."""
+    from packright.use_git import add_git
+
+    try:
+        add_git(project_dir=path)
+    except PackrightError as e:
+        abort(str(e))
+        raise SystemExit(1) from e
+
+
+@main.command("bump-version")
+@click.option("--path", default=".", help="Project directory. Defaults to current directory.")
+@click.option(
+    "--part",
+    default="patch",
+    type=click.Choice(["major", "minor", "patch"]),
+    help="Which version part to bump. Defaults to patch.",
+)
+def bump_version_cmd(path: str, part: str) -> None:
+    """Bump the project version in pyproject.toml."""
+    from packright.use_version import bump_version
+
+    try:
+        bump_version(project_dir=path, part=part)
     except PackrightError as e:
         abort(str(e))
         raise SystemExit(1) from e
